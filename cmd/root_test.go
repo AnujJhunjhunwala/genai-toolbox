@@ -1235,7 +1235,7 @@ func TestPrebuiltTools(t *testing.T) {
 			wantToolset: server.ToolsetConfigs{
 				"dataplex-tools": tools.ToolsetConfig{
 					Name:      "dataplex-tools",
-					ToolNames: []string{"search_entries", "lookup_entry"},
+					ToolNames: []string{"search_entries", "lookup_entry", "get_search_syntax"},
 				},
 			},
 		},
