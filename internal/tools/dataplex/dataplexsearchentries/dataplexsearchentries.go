@@ -120,7 +120,7 @@ func (t *SearchTool) Authorized(verifiedAuthServices []string) bool {
 	return tools.IsAuthorized(t.AuthRequired, verifiedAuthServices)
 }
 
-func (t *SearchTool) Invoke(ctx context.Context, params tools.ParamValues) ([]any, error) {
+func (t *SearchTool) Invoke(ctx context.Context, params tools.ParamValues) (any, error) {
 	paramsMap := params.AsMap()
 	query, _ := paramsMap["query"].(string)
 
