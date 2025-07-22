@@ -52,12 +52,11 @@ var _ compatibleSource = &dataplexds.Source{}
 var compatibleSources = [...]string{dataplexds.SourceKind}
 
 type Config struct {
-	Name         string           `yaml:"name" validate:"required"`
-	Kind         string           `yaml:"kind" validate:"required"`
-	Source       string           `yaml:"source" validate:"required"`
-	Description  string           `yaml:"description"`
-	AuthRequired []string         `yaml:"authRequired"`
-	Parameters   tools.Parameters `yaml:"parameters"`
+	Name         string   `yaml:"name" validate:"required"`
+	Kind         string   `yaml:"kind" validate:"required"`
+	Source       string   `yaml:"source" validate:"required"`
+	Description  string   `yaml:"description"`
+	AuthRequired []string `yaml:"authRequired"`
 }
 
 // validate interface
@@ -79,23 +78,30 @@ func (cfg Config) Initialize(srcs map[string]sources.Source) (tools.Tool, error)
 		return nil, fmt.Errorf("invalid source for %q tool: source kind must be one of %q", kind, compatibleSources)
 	}
 
-	_, paramManifest, paramMcpManifest := tools.ProcessParameters(nil, cfg.Parameters)
+	name := tools.NewStringParameter("name", "The project to which the request should be attributed in the following form: projects/{project}/locations/{location}.")
+	view := tools.NewStringParameterWithDefault("view", string(dataplexpb.EntryView_FULL), "View to control which parts of an entry the service should return.")
+	//aspectTypes := tools.NewArrayParameterWithDefault("aspectTypes", []string{}, "Limits the aspects returned to the provided aspect types. It only works for CUSTOM view.", tools.StringParameter{})
+	//paths := tools.NewArrayParameterWithDefault("paths", []string{}, "The paths of the entries to look up. If not specified, the entry will be looked up by name.", tools.StringParameter{})
+	entry := tools.NewStringParameter("entry", "The resource name of the Entry in the following form: projects/{project}/locations/{location}/entryGroups/{entryGroup}/entries/{entry}.")
+	parameters := tools.Parameters{name, view, entry}
+
+	//_, paramManifest, paramMcpManifest := tools.ProcessParameters(nil, cfg.Parameters)
 
 	mcpManifest := tools.McpManifest{
 		Name:        cfg.Name,
 		Description: cfg.Description,
-		InputSchema: paramMcpManifest,
+		InputSchema: parameters.McpManifest(),
 	}
 
 	t := &LookupTool{
 		Name:          cfg.Name,
 		Kind:          kind,
-		Parameters:    cfg.Parameters,
+		Parameters:    parameters,
 		AuthRequired:  cfg.AuthRequired,
 		CatalogClient: s.CatalogClient(),
 		manifest: tools.Manifest{
 			Description:  cfg.Description,
-			Parameters:   paramManifest,
+			Parameters:   parameters.Manifest(),
 			AuthRequired: cfg.AuthRequired,
 		},
 		mcpManifest: mcpManifest,
@@ -117,25 +123,25 @@ func (t *LookupTool) Authorized(verifiedAuthServices []string) bool {
 	return tools.IsAuthorized(t.AuthRequired, verifiedAuthServices)
 }
 
-func (t *LookupTool) Invoke(ctx context.Context, params tools.ParamValues) ([]any, error) {
+func (t *LookupTool) Invoke(ctx context.Context, params tools.ParamValues) (any, error) {
 	paramsMap := params.AsMap()
 	name, _ := paramsMap["name"].(string)
 	entry, _ := paramsMap["entry"].(string)
 	view, _ := paramsMap["view"].(dataplexpb.EntryView)
-	aspect_types, _ := paramsMap["aspect_types"].([]string)
+	//aspect_types, _ := paramsMap["aspect_types"].([]string)
 
 	req := &dataplexpb.LookupEntryRequest{
-		Name:        name,
-		View:        view,
-		AspectTypes: aspect_types,
-		Entry:       entry,
+		Name: name,
+		View: view,
+		//AspectTypes: aspect_types,
+		Entry: entry,
 	}
 
 	result, err := t.CatalogClient.LookupEntry(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return []any{result}, nil
+	return result, nil
 }
 
 func (t *LookupTool) ParseParams(data map[string]any, claims map[string]map[string]any) (tools.ParamValues, error) {

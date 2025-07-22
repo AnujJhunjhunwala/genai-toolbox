@@ -1,25 +1,24 @@
 ---
-title: "dataplex-search-entries"
+title: "dataplex-lookup-entry"
 type: docs
 weight: 1
 description: > 
-  A "dataplex-search-entries" tool returns all entries in Dataplex Catalog.
+  A "dataplex-lookup-entry" tool returns details of a particular entry in Dataplex Catalog.
 aliases:
-- /resources/tools/dataplex-search-entries
+- /resources/tools/dataplex-lookup-entry
 ---
 
 ## About
 
-A `dataplex-search-entries` tool returns all entries in Dataplex Catalog (e.g. tables, views, models) that matches given user query.
+A `dataplex-lookup-entry` tool returns details of a particular entry in Dataplex Catalog.
 It's compatible with the following sources:
 
 - [dataplex](../sources/dataplex.md)
 
-`dataplex-search-entries` takes a required `query` parameter based on which entries are 
-filtered and returned to the user and a required `name` parameter which is constructed using source's project if user does not provide it explicitly and has the following format: projects/{project}/locations/global. It also optionally accepts following parameters:
-  - `pageSize` - Number of results in the search page.
-  - `pageToken` - Page token received from a previous locations.searchEntries call.
-  - `orderBy` - Specifies the ordering of results. Supported values are: relevance (default), last_modified_timestamp, last_modified_timestamp asc
+`dataplex-lookup-entry` takes a required `name` parameter which contains the project and location to which the request should be attributed in the following form: projects/{project}/locations/{location} and also a required `entry` parameter which is the resource name of the entry in the following form: projects/{project}/locations/{location}/entryGroups/{entryGroup}/entries/{entry}. It also optionally accepts following parameters:
+  - `view` - View to control which parts of an entry the service should return.
+  - `aspectTypes` - Limits the aspects returned to the provided aspect types. It only works for CUSTOM view.
+  - `paths` - Limits the aspects returned to those associated with the provided paths within the Entry. It only works for CUSTOM view.
 
 ## Requirements
 
@@ -46,16 +45,16 @@ applying IAM permissions and roles to an identity.
 
 ```yaml
 tools:
-  dataplex-search-entries:
-    kind: dataplex-search-entries
+  lookup_entry:
+    kind: dataplex-lookup-entry
     source: my-dataplex-source
-    description: Use this tool to get all the entries based on user query.
+    description: Get details about a specific entry in Catalog.
 ```
 
 ## Reference
 
 | **field**   |                  **type**                  | **required** | **description**                                                                                  |
 |-------------|:------------------------------------------:|:------------:|--------------------------------------------------------------------------------------------------|
-| kind        |                   string                   |     true     | Must be "dataplex-search-entries".                                                               |
+| kind        |                   string                   |     true     | Must be "dataplex-lookup-entry".                                                               |
 | source      |                   string                   |     true     | Name of the source the tool should execute on.                                                   |
 | description |                   string                   |     true     | Description of the tool that is passed to the LLM.                                               |
