@@ -1,0 +1,14 @@
+sources:
+  my-dataplex-source:
+    kind: dataplex
+    project: matnow-test-project
+
+tools:
+  find-recently-created-tables:
+    kind: dataplex-search-entries
+    source: my-dataplex-source
+    query: createdAt>2025-07-01 type=table
+
+toolsets:
+  my_dataplex_toolset:
+    - find-recently-created-tables

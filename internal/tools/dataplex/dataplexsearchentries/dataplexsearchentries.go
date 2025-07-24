@@ -15,11 +15,10 @@
 package dataplexsearchentries
 
 import (
-	"context"
-	"fmt"
-
 	dataplexapi "cloud.google.com/go/dataplex/apiv1"
 	dataplexpb "cloud.google.com/go/dataplex/apiv1/dataplexpb"
+	"context"
+	"fmt"
 	"github.com/goccy/go-yaml"
 	"github.com/googleapis/genai-toolbox/internal/sources"
 	dataplexds "github.com/googleapis/genai-toolbox/internal/sources/dataplex"
@@ -132,15 +131,15 @@ func (t *SearchTool) Invoke(ctx context.Context, params tools.ParamValues) (any,
 	pageSize, _ := paramsMap["pageSize"].(int32)
 	pageToken, _ := paramsMap["pageToken"].(string)
 	orderBy, _ := paramsMap["orderBy"].(string)
-	semanticSearch, _ := paramsMap["semanticSearch"].(bool)
+	// semanticSearch, _ := paramsMap["semanticSearch"].(bool)
 
 	req := &dataplexpb.SearchEntriesRequest{
-		Query:          query,
-		Name:           name,
-		PageSize:       pageSize,
-		PageToken:      pageToken,
-		OrderBy:        orderBy,
-		SemanticSearch: semanticSearch,
+		Query:     query,
+		Name:      name,
+		PageSize:  pageSize,
+		PageToken: pageToken,
+		OrderBy:   orderBy,
+		Scope:     "projects/matnow-test-project",
 	}
 
 	it := t.CatalogClient.SearchEntries(ctx, req)

@@ -15,11 +15,10 @@
 package dataplexlookupentry
 
 import (
-	"context"
-	"fmt"
-
 	dataplexapi "cloud.google.com/go/dataplex/apiv1"
 	dataplexpb "cloud.google.com/go/dataplex/apiv1/dataplexpb"
+	"context"
+	"fmt"
 	"github.com/goccy/go-yaml"
 	"github.com/googleapis/genai-toolbox/internal/sources"
 	dataplexds "github.com/googleapis/genai-toolbox/internal/sources/dataplex"
@@ -80,12 +79,12 @@ func (cfg Config) Initialize(srcs map[string]sources.Source) (tools.Tool, error)
 
 	name := tools.NewStringParameter("name", "The project to which the request should be attributed in the following form: projects/{project}/locations/{location}.")
 	view := tools.NewStringParameterWithDefault("view", string(dataplexpb.EntryView_FULL), "View to control which parts of an entry the service should return.")
-	//aspectTypes := tools.NewArrayParameterWithDefault("aspectTypes", []string{}, "Limits the aspects returned to the provided aspect types. It only works for CUSTOM view.", tools.StringParameter{})
-	//paths := tools.NewArrayParameterWithDefault("paths", []string{}, "The paths of the entries to look up. If not specified, the entry will be looked up by name.", tools.StringParameter{})
+	aspectTypes := tools.NewArrayParameterWithDefault("aspectTypes", []any{}, "Limits the aspects returned to the provided aspect types. It only works for CUSTOM view.", tools.NewStringParameter("aspect_type", "The aspect type to be included in the response."))
+	// paths := tools.NewArrayParameterWithDefault("paths", []string{}, "The paths of the entries to look up. If not specified, the entry will be looked up by name.", tools.StringParameter{})
 	entry := tools.NewStringParameter("entry", "The resource name of the Entry in the following form: projects/{project}/locations/{location}/entryGroups/{entryGroup}/entries/{entry}.")
-	parameters := tools.Parameters{name, view, entry}
+	parameters := tools.Parameters{name, view, aspectTypes, entry}
 
-	//_, paramManifest, paramMcpManifest := tools.ProcessParameters(nil, cfg.Parameters)
+	// _, paramManifest, paramMcpManifest := tools.ProcessParameters(nil, cfg.Parameters)
 
 	mcpManifest := tools.McpManifest{
 		Name:        cfg.Name,
@@ -128,13 +127,13 @@ func (t *LookupTool) Invoke(ctx context.Context, params tools.ParamValues) (any,
 	name, _ := paramsMap["name"].(string)
 	entry, _ := paramsMap["entry"].(string)
 	view, _ := paramsMap["view"].(dataplexpb.EntryView)
-	//aspect_types, _ := paramsMap["aspect_types"].([]string)
+	aspect_types, _ := paramsMap["aspect_types"].([]string)
 
 	req := &dataplexpb.LookupEntryRequest{
-		Name: name,
-		View: view,
-		//AspectTypes: aspect_types,
-		Entry: entry,
+		Name:        name,
+		View:        view,
+		AspectTypes: aspect_types,
+		Entry:       entry,
 	}
 
 	result, err := t.CatalogClient.LookupEntry(ctx, req)
