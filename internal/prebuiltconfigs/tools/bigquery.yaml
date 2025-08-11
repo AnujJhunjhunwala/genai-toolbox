@@ -2,6 +2,9 @@ sources:
   bigquery-source:
     kind: "bigquery"
     project: ${BIGQUERY_PROJECT}
+  dataplex-source:
+    kind: "dataplex"
+    project: ${BIGQUERY_PROJECT}
 
 tools:
   execute_sql:
@@ -28,6 +31,11 @@ tools:
     kind: bigquery-list-table-ids
     source: bigquery-source
     description: Use this tool to list tables.
+  search_catalog:
+    kind: bigquery-search-catalog
+    source: dataplex-source
+    description: Use this tool to find tables, views, models, routines or connections.
+
 
 toolsets:
   bigquery-database-tools:
@@ -36,3 +44,4 @@ toolsets:
     - get_table_info
     - list_dataset_ids
     - list_table_ids
+    - search_catalog
