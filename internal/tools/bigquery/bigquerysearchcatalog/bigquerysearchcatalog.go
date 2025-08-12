@@ -81,7 +81,7 @@ func (cfg Config) Initialize(srcs map[string]sources.Source) (tools.Tool, error)
 		return nil, fmt.Errorf("invalid source for %q tool: source kind must be one of %q", kind, compatibleSources)
 	}
 
-	prompt := tools.NewStringParameter("prompt", "User prompt representing search intention. Do not rewrite the prompt. Just use keywords separated by spaces from the user prompt.")
+	prompt := tools.NewStringParameter("prompt", "User prompt representing search intention. Do not rewrite the prompt.")
 	tableIds := tools.NewArrayParameterWithDefault("tableIds", []any{}, "Array of table IDs.", tools.NewStringParameter("tableId", "The IDs of the bigquery table."))
 	datasetIds := tools.NewArrayParameterWithDefault("datasetIds", []any{}, "Array of dataset IDs.", tools.NewStringParameter("datasetId", "The IDs of the bigquery dataset."))
 	projectIds := tools.NewArrayParameterWithDefault("projectIds", []any{}, "Array of project IDs.", tools.NewStringParameter("projectId", "The IDs of the bigquery project."))
@@ -181,6 +181,25 @@ type Response struct {
 	DataplexEntry string
 }
 
+var typeMap = map[string]string{
+	"bigquery-connection":  "CONNECTION",
+	"bigquery-data-policy": "POLICY",
+	"bigquery-dataset":     "DATASET",
+	"bigquery-model":       "MODEL",
+	"bigquery-routine":     "ROUTINE",
+	"bigquery-table":       "TABLE",
+	"bigquery-view":        "VIEW",
+}
+
+func ExtractEntryType(resourceString string) string {
+	lastIndex := strings.LastIndex(resourceString, "/")
+	if lastIndex == -1 {
+		// No "/" found, return the original string
+		return resourceString
+	}
+	return typeMap[resourceString[lastIndex+1:]]
+}
+
 func (t Tool) Invoke(ctx context.Context, params tools.ParamValues) (any, error) {
 	paramsMap := params.AsMap()
 	pageSize := int32(paramsMap["pageSize"].(int))
@@ -233,7 +252,7 @@ func (t Tool) Invoke(ctx context.Context, params tools.ParamValues) (any, error)
 		resp := Response{
 			DisplayName:   entrySource.GetDisplayName(),
 			Description:   entrySource.GetDescription(),
-			EntryType:     entry.DataplexEntry.GetEntryType(),
+			EntryType:     ExtractEntryType(entry.DataplexEntry.GetEntryType()),
 			Resource:      entrySource.GetResource(),
 			DataplexEntry: entry.DataplexEntry.GetName(),
 		}
