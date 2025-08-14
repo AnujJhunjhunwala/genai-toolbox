@@ -81,13 +81,12 @@ func (cfg Config) Initialize(srcs map[string]sources.Source) (tools.Tool, error)
 		return nil, fmt.Errorf("invalid source for %q tool: source kind must be one of %q", kind, compatibleSources)
 	}
 
-	prompt := tools.NewStringParameter("prompt", "User prompt representing search intention. Do not rewrite the prompt.")
-	tableIds := tools.NewArrayParameterWithDefault("tableIds", []any{}, "Array of table IDs.", tools.NewStringParameter("tableId", "The IDs of the bigquery table."))
+	prompt := tools.NewStringParameter("prompt", "Prompt representing search intention. Do not rewrite the prompt.")
 	datasetIds := tools.NewArrayParameterWithDefault("datasetIds", []any{}, "Array of dataset IDs.", tools.NewStringParameter("datasetId", "The IDs of the bigquery dataset."))
 	projectIds := tools.NewArrayParameterWithDefault("projectIds", []any{}, "Array of project IDs.", tools.NewStringParameter("projectId", "The IDs of the bigquery project."))
-	types := tools.NewArrayParameterWithDefault("types", []any{}, "Array of entry types to filter by.", tools.NewStringParameter("type", "The type of the entry."))
+	types := tools.NewArrayParameterWithDefault("types", []any{}, "Array of data types to filter by.", tools.NewStringParameter("type", "The type of the data. Accepted values are: CONNECTION, POLICY, DATASET, MODEL, ROUTINE, TABLE, VIEW."))
 	pageSize := tools.NewIntParameterWithDefault("pageSize", 5, "Number of results in the search page.")
-	parameters := tools.Parameters{prompt, tableIds, datasetIds, projectIds, types, pageSize}
+	parameters := tools.Parameters{prompt, datasetIds, projectIds, types, pageSize}
 
 	mcpManifest := tools.McpManifest{
 		Name:        cfg.Name,
@@ -150,18 +149,14 @@ func constructSearchQueryHelper(predicate string, operator string, items []strin
 	return builder.String()
 }
 
-func constructSearchQuery(projectIds []string, datasetIds []string, tableIds []string, types []string) string {
+func constructSearchQuery(projectIds []string, datasetIds []string, types []string) string {
 	queryParts := []string{}
-
-	if clause := constructSearchQueryHelper("name", ":", tableIds); clause != "" {
-		queryParts = append(queryParts, clause)
-	}
 
 	if clause := constructSearchQueryHelper("projectid", "=", projectIds); clause != "" {
 		queryParts = append(queryParts, clause)
 	}
 
-	if clause := constructSearchQueryHelper("datasetid", "=", datasetIds); clause != "" {
+	if clause := constructSearchQueryHelper("parent", "=", datasetIds); clause != "" {
 		queryParts = append(queryParts, clause)
 	}
 
@@ -176,7 +171,7 @@ func constructSearchQuery(projectIds []string, datasetIds []string, tableIds []s
 type Response struct {
 	DisplayName   string
 	Description   string
-	EntryType     string
+	Type          string
 	Resource      string
 	DataplexEntry string
 }
@@ -191,7 +186,7 @@ var typeMap = map[string]string{
 	"bigquery-view":        "VIEW",
 }
 
-func ExtractEntryType(resourceString string) string {
+func ExtractType(resourceString string) string {
 	lastIndex := strings.LastIndex(resourceString, "/")
 	if lastIndex == -1 {
 		// No "/" found, return the original string
@@ -214,11 +209,6 @@ func (t Tool) Invoke(ctx context.Context, params tools.ParamValues) (any, error)
 		return nil, fmt.Errorf("can't convert datasetIds to array of strings: %s", err)
 	}
 	datasetIds := datasetIdSlice.([]string)
-	tableIdSlice, err := tools.ConvertAnySliceToTyped(paramsMap["tableIds"].([]any), "string")
-	if err != nil {
-		return nil, fmt.Errorf("can't convert tableIds to array of strings: %s", err)
-	}
-	tableIds := tableIdSlice.([]string)
 	typesSlice, err := tools.ConvertAnySliceToTyped(paramsMap["types"].([]any), "string")
 	if err != nil {
 		return nil, fmt.Errorf("can't convert types to array of strings: %s", err)
@@ -226,7 +216,7 @@ func (t Tool) Invoke(ctx context.Context, params tools.ParamValues) (any, error)
 	types := typesSlice.([]string)
 
 	req := &dataplexpb.SearchEntriesRequest{
-		Query:          fmt.Sprintf("%s %s", prompt, constructSearchQuery(projectIds, datasetIds, tableIds, types)),
+		Query:          fmt.Sprintf("%s %s", prompt, constructSearchQuery(projectIds, datasetIds, types)),
 		Name:           fmt.Sprintf("projects/%s/locations/global", t.ProjectID),
 		PageSize:       pageSize,
 		SemanticSearch: true,
@@ -252,7 +242,7 @@ func (t Tool) Invoke(ctx context.Context, params tools.ParamValues) (any, error)
 		resp := Response{
 			DisplayName:   entrySource.GetDisplayName(),
 			Description:   entrySource.GetDescription(),
-			EntryType:     ExtractEntryType(entry.DataplexEntry.GetEntryType()),
+			Type:          ExtractType(entry.DataplexEntry.GetEntryType()),
 			Resource:      entrySource.GetResource(),
 			DataplexEntry: entry.DataplexEntry.GetName(),
 		}
