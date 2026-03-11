@@ -41,6 +41,7 @@ import (
 
 var (
 	DataplexSourceType                = "dataplex"
+	DataplexLookupContextToolType     = "dataplex-lookup-context"
 	DataplexSearchEntriesToolType     = "dataplex-search-entries"
 	DataplexLookupEntryToolType       = "dataplex-lookup-entry"
 	DataplexSearchAspectTypesToolType = "dataplex-search-aspect-types"
