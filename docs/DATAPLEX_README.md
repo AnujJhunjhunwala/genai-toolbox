@@ -46,11 +46,12 @@ Once configured, the MCP server will automatically provide Dataplex capabilities
 
 The Dataplex MCP server provides the following tools:
 
-| Tool Name             | Description                                      |
-|:----------------------|:-------------------------------------------------|
-| `search_entries`      | Search for entries in Dataplex Catalog.          |
-| `lookup_entry`        | Retrieve a specific entry from Dataplex Catalog. |
-| `search_aspect_types` | Find aspect types relevant to the query.         |
+| Tool Name             | Description                                                        |
+|:----------------------|:-------------------------------------------------------------------|
+| `search_entries`      | Search for entries in Dataplex Catalog.                            |
+| `lookup_entry`        | Retrieve a specific entry from Dataplex Catalog.                   |
+| `search_aspect_types` | Find aspect types relevant to the query.                           |
+| `lookup_context`      | Retrieves metadata of one or more resources from Dataplex Catalog. |
 
 ## Custom MCP Server Configuration
 
