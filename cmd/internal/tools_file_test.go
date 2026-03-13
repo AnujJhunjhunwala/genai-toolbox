@@ -1710,9 +1710,33 @@ func TestPrebuiltTools(t *testing.T) {
 			name: "cloudsqlpg prebuilt tools",
 			in:   cloudsqlpg_config,
 			wantToolset: server.ToolsetConfigs{
-				"cloud_sql_postgres_database_tools": tools.ToolsetConfig{
-					Name:      "cloud_sql_postgres_database_tools",
-					ToolNames: []string{"execute_sql", "list_tables", "list_active_queries", "list_available_extensions", "list_installed_extensions", "list_autovacuum_configurations", "list_memory_configurations", "list_top_bloated_tables", "list_replication_slots", "list_invalid_indexes", "get_query_plan", "list_views", "list_schemas", "database_overview", "list_triggers", "list_indexes", "list_sequences", "long_running_transactions", "list_locks", "replication_stats", "list_query_stats", "get_column_cardinality", "list_publication_tables", "list_tablespaces", "list_pg_settings", "list_database_stats", "list_roles", "list_table_stats", "list_stored_procedure"},
+				"admin": tools.ToolsetConfig{
+					Name:      "admin",
+					ToolNames: []string{"create_instance", "get_instance", "list_instances", "create_database", "list_databases", "create_user", "wait_for_operation", "clone_instance"},
+				},
+				"lifecycle": tools.ToolsetConfig{
+					Name:      "lifecycle",
+					ToolNames: []string{"create_backup", "restore_backup", "postgres_upgrade_precheck", "wait_for_operation", "database_overview", "get_instance", "list_instances"},
+				},
+				"data": tools.ToolsetConfig{
+					Name:      "data",
+					ToolNames: []string{"execute_sql", "list_tables", "list_views", "list_schemas", "list_triggers", "list_indexes", "list_sequences", "list_stored_procedure"},
+				},
+				"monitor": tools.ToolsetConfig{
+					Name:      "monitor",
+					ToolNames: []string{"get_system_metrics", "get_query_metrics", "list_query_stats", "get_query_plan", "list_database_stats", "list_active_queries", "long_running_transactions", "list_locks"},
+				},
+				"health": tools.ToolsetConfig{
+					Name:      "health",
+					ToolNames: []string{"list_top_bloated_tables", "list_invalid_indexes", "list_table_stats", "get_column_cardinality", "list_autovacuum_configurations", "list_tablespaces", "database_overview", "list_pg_settings"},
+				},
+				"view-config": tools.ToolsetConfig{
+					Name:      "view-config",
+					ToolNames: []string{"list_available_extensions", "list_installed_extensions", "list_memory_configurations", "list_pg_settings", "database_overview", "get_instance"},
+				},
+				"replication": tools.ToolsetConfig{
+					Name:      "replication",
+					ToolNames: []string{"replication_stats", "list_replication_slots", "list_publication_tables", "list_roles", "list_pg_settings", "database_overview"},
 				},
 			},
 		},
@@ -1720,9 +1744,21 @@ func TestPrebuiltTools(t *testing.T) {
 			name: "cloudsqlmysql prebuilt tools",
 			in:   cloudsqlmysql_config,
 			wantToolset: server.ToolsetConfigs{
-				"cloud_sql_mysql_database_tools": tools.ToolsetConfig{
-					Name:      "cloud_sql_mysql_database_tools",
-					ToolNames: []string{"execute_sql", "list_tables", "get_query_plan", "list_active_queries", "list_tables_missing_unique_indexes", "list_table_fragmentation"},
+				"admin": tools.ToolsetConfig{
+					Name:      "admin",
+					ToolNames: []string{"create_instance", "get_instance", "list_instances", "create_database", "list_databases", "create_user", "wait_for_operation"},
+				},
+				"data": tools.ToolsetConfig{
+					Name:      "data",
+					ToolNames: []string{"execute_sql", "list_tables", "get_query_plan", "list_active_queries"},
+				},
+				"monitor": tools.ToolsetConfig{
+					Name:      "monitor",
+					ToolNames: []string{"get_query_plan", "list_active_queries", "get_query_metrics", "get_system_metrics", "list_table_fragmentation", "list_tables_missing_unique_indexes"},
+				},
+				"lifecycle": tools.ToolsetConfig{
+					Name:      "lifecycle",
+					ToolNames: []string{"create_backup", "restore_backup", "clone_instance", "list_instances", "get_instance", "wait_for_operation"},
 				},
 			},
 		},
@@ -1730,9 +1766,21 @@ func TestPrebuiltTools(t *testing.T) {
 			name: "cloudsqlmssql prebuilt tools",
 			in:   cloudsqlmssql_config,
 			wantToolset: server.ToolsetConfigs{
-				"cloud_sql_mssql_database_tools": tools.ToolsetConfig{
-					Name:      "cloud_sql_mssql_database_tools",
+				"admin": tools.ToolsetConfig{
+					Name:      "admin",
+					ToolNames: []string{"create_instance", "get_instance", "list_instances", "create_database", "list_databases", "create_user", "wait_for_operation"},
+				},
+				"data": tools.ToolsetConfig{
+					Name:      "data",
 					ToolNames: []string{"execute_sql", "list_tables"},
+				},
+				"monitor": tools.ToolsetConfig{
+					Name:      "monitor",
+					ToolNames: []string{"get_system_metrics"},
+				},
+				"lifecycle": tools.ToolsetConfig{
+					Name:      "lifecycle",
+					ToolNames: []string{"create_backup", "restore_backup", "clone_instance", "list_instances", "get_instance", "wait_for_operation"},
 				},
 			},
 		},
