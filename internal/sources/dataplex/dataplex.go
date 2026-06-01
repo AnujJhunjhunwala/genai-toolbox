@@ -92,8 +92,6 @@ type Source struct {
 	DataScanClient *dataplexapi.DataScanClient
 }
 
-type DataplexClientCreator func(tokenString string) (*dataplexapi.CatalogClient, error)
-
 func (s *Source) SourceType() string {
 	// Returns Dataplex source type
 	return SourceType
