@@ -59,7 +59,6 @@ type Config struct {
 	Name                      string   `yaml:"name" validate:"required"`
 	Type                      string   `yaml:"type" validate:"required"`
 	Project                   string   `yaml:"project" validate:"required"`
-	UseClientOAuth            string   `yaml:"useClientOAuth"`
 	ImpersonateServiceAccount string   `yaml:"impersonateServiceAccount"`
 	Scopes                    []string `yaml:"scopes"`
 }
