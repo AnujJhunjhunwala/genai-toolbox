@@ -59,7 +59,7 @@ type Config struct {
 	Name                      string   `yaml:"name" validate:"required"`
 	Type                      string   `yaml:"type" validate:"required"`
 	Project                   string   `yaml:"project" validate:"required"`
-	ImpersonateServiceAccount string   `yaml:"impersonateServiceAccount"`
+	ImpersonateServiceAccount string   `yaml:"impersonateServiceAccount" validate:"omitempty,email"`
 	Scopes                    []string `yaml:"scopes"`
 }
 
@@ -142,7 +142,7 @@ func initDataplexConnection(
 			Scopes:          credScopes,
 		})
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to create impersonated credentials for %q: %w", impersonateServiceAccount, err)
+			return nil, nil, fmt.Errorf("failed to create impersonated credentials for %q for project %q: %w", impersonateServiceAccount, project, err)
 		}
 		opts = []option.ClientOption{
 			option.WithUserAgent(userAgent),
@@ -152,7 +152,7 @@ func initDataplexConnection(
 		// Use default credentials
 		cred, err := google.FindDefaultCredentials(ctx, credScopes...)
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to find default Google Cloud credentials: %w", err)
+			return nil, nil, fmt.Errorf("failed to find default Google Cloud credentials for project %q: %w", project, err)
 		}
 		opts = []option.ClientOption{
 			option.WithUserAgent(userAgent),
