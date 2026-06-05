@@ -803,6 +803,12 @@ names, or other parts of the query.&lt;/p&gt;</description></item><item><title>C
  &lt;/tr&gt;
  &lt;tr&gt;
  &lt;td&gt;&lt;/td&gt;
+ &lt;td&gt;&lt;code&gt;--ignore-unknown-tools&lt;/code&gt;&lt;/td&gt;
+ &lt;td&gt;Log warnings and skip unknown/unsupported tool types instead of failing to start.&lt;/td&gt;
+ &lt;td&gt;&lt;/td&gt;
+ &lt;/tr&gt;
+ &lt;tr&gt;
+ &lt;td&gt;&lt;/td&gt;
  &lt;td&gt;&lt;code&gt;--log-level&lt;/code&gt;&lt;/td&gt;
  &lt;td&gt;Specify the minimum level logged. Allowed: &amp;lsquo;DEBUG&amp;rsquo;, &amp;lsquo;INFO&amp;rsquo;, &amp;lsquo;WARN&amp;rsquo;, &amp;lsquo;ERROR&amp;rsquo;.&lt;/td&gt;
  &lt;td&gt;&lt;code&gt;info&lt;/code&gt;&lt;/td&gt;
@@ -4522,16 +4528,15 @@ of a LookML project.&lt;/p&gt;
  &lt;/tr&gt;
  &lt;/tbody&gt;
 &lt;/table&gt;</description></item><item><title>Google Sign-In</title><link>https://mcp-toolbox.dev/dev/documentation/configuration/authentication/google/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/documentation/configuration/authentication/google/</guid><description>&lt;h2 id="getting-started"&gt;Getting Started&lt;/h2&gt;
-&lt;p&gt;Google Sign-In manages the OAuth 2.0 flow and token lifecycle. To integrate the
-Google Sign-In workflow to your web app &lt;a href="https://developers.google.com/identity/sign-in/web/sign-in"&gt;follow this guide&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;After setting up the Google Sign-In workflow, you should have registered your
-application and retrieved a &lt;a href="https://developers.google.com/identity/sign-in/web/sign-in#create_authorization_credentials"&gt;Client ID&lt;/a&gt;. Configure your auth service
-in with the &lt;code&gt;Client ID&lt;/code&gt;.&lt;/p&gt;
-&lt;h2 id="behavior"&gt;Behavior&lt;/h2&gt;
-&lt;h3 id="authorized-invocations"&gt;Authorized Invocations&lt;/h3&gt;
-&lt;p&gt;When using &lt;a href="https://mcp-toolbox.dev/dev/documentation/configuration/tools/#authorized-invocations"&gt;Authorized Invocations&lt;/a&gt;, a tool will be
-considered authorized if it has a valid Oauth 2.0 token that matches the Client
-ID.&lt;/p&gt;</description></item><item><title>http</title><link>https://mcp-toolbox.dev/dev/integrations/http/tools/http-tool/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/integrations/http/tools/http-tool/</guid><description>&lt;h2 id="about"&gt;About&lt;/h2&gt;
+&lt;p&gt;Google Sign-In manages the OAuth 2.0 flow and token lifecycle. To integrate the Google Sign-In workflow to your web app, &lt;a href="https://developers.google.com/identity/sign-in/web/sign-in"&gt;follow this guide&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;After setting up Google Sign-In, configure your auth service in the toolbox. The Google auth provider supports two distinct validation modes:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Web App Claims (OIDC)&lt;/strong&gt;: Used to authenticate user requests in web applications.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;MCP Authorization&lt;/strong&gt;: Used to secure the entire MCP server transport (SSE or Stdio).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="configuration-modes"&gt;Configuration Modes&lt;/h2&gt;
+&lt;h3 id="1-web-app-oidc-authentication"&gt;1. Web App OIDC Authentication&lt;/h3&gt;
+&lt;p&gt;If you are developing a web application using the Toolbox and need to retrieve user claims from Google ID tokens sent in custom request headers, configure the &lt;code&gt;clientId&lt;/code&gt; field.&lt;/p&gt;</description></item><item><title>http</title><link>https://mcp-toolbox.dev/dev/integrations/http/tools/http-tool/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/integrations/http/tools/http-tool/</guid><description>&lt;h2 id="about"&gt;About&lt;/h2&gt;
 &lt;p&gt;The &lt;code&gt;http&lt;/code&gt; tool allows you to make HTTP requests to APIs to retrieve data.
 An HTTP request is the method by which a client communicates with a server to
 retrieve or manipulate resources.
@@ -8417,7 +8422,7 @@ returned. Otherwise, the selection is not guaranteed.&lt;/p&gt;
 &lt;p&gt;The tool returns a single JSON object representing the document, wrapped in a
 JSON array.&lt;/p&gt;
 &lt;h2 id="compatible-sources"&gt;Compatible Sources&lt;/h2&gt;
-&lt;h2 id="hahahugoshortcode331s0hbhb"&gt;
+&lt;h2 id="hahahugoshortcode381s0hbhb"&gt;
 
 
 
@@ -14320,6 +14325,10 @@ the Google Cloud console&lt;/a&gt;.&lt;/p&gt;
  
  
  
+ 
+ 
+ 
+ 
 
 
 
@@ -14341,6 +14350,12 @@ the Google Cloud console&lt;/a&gt;.&lt;/p&gt;
  &lt;tr&gt;
  &lt;td&gt;&lt;a href="https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-execute-sql/"&gt;&lt;strong&gt;spanner-execute-sql&lt;/strong&gt;&lt;/a&gt;&lt;/td&gt;
  &lt;td&gt;A &amp;#34;spanner-execute-sql&amp;#34; tool executes a SQL statement against a Spanner database.
+&lt;/td&gt;
+ &lt;/tr&gt;
+ 
+ &lt;tr&gt;
+ &lt;td&gt;&lt;a href="https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-search-catalog/"&gt;&lt;strong&gt;spanner-search-catalog&lt;/strong&gt;&lt;/a&gt;&lt;/td&gt;
+ &lt;td&gt;A &amp;#34;spanner-search-catalog&amp;#34; tool allows to search for entries based on the provided query.
 &lt;/td&gt;
  &lt;/tr&gt;
  
@@ -14825,7 +14840,26 @@ human-in-the-loop and shouldn&amp;rsquo;t be used for production agents.&lt;/p&g
  &lt;td&gt;When set to &lt;code&gt;true&lt;/code&gt;, the &lt;code&gt;statement&lt;/code&gt; is run as a read-only transaction. Default: &lt;code&gt;false&lt;/code&gt;.&lt;/td&gt;
  &lt;/tr&gt;
  &lt;/tbody&gt;
-&lt;/table&gt;</description></item><item><title>spanner-sql</title><link>https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-sql/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-sql/</guid><description>&lt;h2 id="about"&gt;About&lt;/h2&gt;
+&lt;/table&gt;</description></item><item><title>spanner-search-catalog</title><link>https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-search-catalog/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-search-catalog/</guid><description>&lt;h2 id="about"&gt;About&lt;/h2&gt;
+&lt;p&gt;A &lt;code&gt;spanner-search-catalog&lt;/code&gt; tool returns all entries in Knowledge Catalog (e.g.
+tables, views, databases) with system=Spanner that matches given user query.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;spanner-search-catalog&lt;/code&gt; takes a required &lt;code&gt;prompt&lt;/code&gt; parameter based on which
+entries are filtered and returned to the user. It also optionally accepts
+following parameters:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;databaseIds&lt;/code&gt; - The IDs of the spanner database.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;projectIds&lt;/code&gt; - The IDs of the GCP project.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;types&lt;/code&gt; - The type of the data. Accepted values are: DATABASE, TABLE, VIEW.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pageSize&lt;/code&gt; - Number of results in the search page. Defaults to &lt;code&gt;5&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="compatible-sources"&gt;Compatible Sources&lt;/h2&gt;
+
+
+
+
+
+&lt;div class="compatibility-section"&gt;
+ &lt;p&gt;This tool can be used with the following database sources:&lt;/p&gt;</description></item><item><title>spanner-sql</title><link>https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-sql/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-sql/</guid><description>&lt;h2 id="about"&gt;About&lt;/h2&gt;
 &lt;p&gt;A &lt;code&gt;spanner-sql&lt;/code&gt; tool executes a pre-defined SQL statement (either &lt;code&gt;googlesql&lt;/code&gt; or
 &lt;code&gt;postgresql&lt;/code&gt;) against a Cloud Spanner database.&lt;/p&gt;
 &lt;h2 id="compatible-sources"&gt;Compatible Sources&lt;/h2&gt;
@@ -20128,6 +20162,7 @@ execute DML queries.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;execute_sql_dql&lt;/code&gt;: Executes a DQL SQL query.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;list_tables&lt;/code&gt;: Lists tables in the database.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;list_graphs&lt;/code&gt;: Lists graphs in the database.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;search_catalog&lt;/code&gt;: Searches for data assets in Knowledge Catalog (Dataplex).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Spanner (PostgreSQL dialect)</title><link>https://mcp-toolbox.dev/dev/integrations/spanner/prebuilt-configs/spanner-postgresql-dialect/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/integrations/spanner/prebuilt-configs/spanner-postgresql-dialect/</guid><description>&lt;h2 id="spanner-postgresql-dialect"&gt;Spanner (PostgreSQL dialect)&lt;/h2&gt;
@@ -20155,6 +20190,7 @@ for Spanner.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;execute_sql_dql&lt;/code&gt;: Executes a DQL SQL query using the PostgreSQL
 interface for Spanner.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;list_tables&lt;/code&gt;: Lists tables in the database.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;search_catalog&lt;/code&gt;: Searches for data assets in Knowledge Catalog (Dataplex).&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>SQLite</title><link>https://mcp-toolbox.dev/dev/integrations/sqlite/prebuilt-configs/sqlite/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mcp-toolbox.dev/dev/integrations/sqlite/prebuilt-configs/sqlite/</guid><description>&lt;h2 id="sqlite"&gt;SQLite&lt;/h2&gt;

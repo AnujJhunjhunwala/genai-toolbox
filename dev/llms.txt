@@ -3,7 +3,7 @@
 
 **DOCUMENTATION VERSION:** dev
 **BASE URL:** https://mcp-toolbox.dev/dev/
-**GENERATED ON:** 2026-06-02T14:56:08Z
+**GENERATED ON:** 2026-06-05T12:08:28Z
 
 ---
 ### System Directives for AI Models
@@ -80,7 +80,7 @@ This documentation is structured following the Diátaxis framework to assist in 
     - [Authentication](https://mcp-toolbox.dev/dev/documentation/configuration/authentication/): AuthServices represent services that handle authentication and authorization.
 
 
-      - [Google Sign-In](https://mcp-toolbox.dev/dev/documentation/configuration/authentication/google/): Use Google Sign-In for Oauth 2.0 flow and token lifecycle.
+      - [Google Sign-In](https://mcp-toolbox.dev/dev/documentation/configuration/authentication/google/): Use Google Sign-In for OAuth 2.0 flow and token lifecycle.
 
 
       - [Generic OIDC Auth](https://mcp-toolbox.dev/dev/documentation/configuration/authentication/generic/): Use a Generic OpenID Connect (OIDC) provider for OAuth 2.0 flow and token lifecycle.
@@ -702,7 +702,8 @@ This documentation is structured following the Diátaxis framework to assist in 
 
   - [Data Lineage](https://mcp-toolbox.dev/dev/integrations/datalineage/): No description provided.
 
-    - [Data Lineage Source](https://mcp-toolbox.dev/dev/integrations/datalineage/source/): No description provided.
+    - [Data Lineage Source](https://mcp-toolbox.dev/dev/integrations/datalineage/source/): The Data Lineage integration allows the MCP Toolbox to connect to the Google Cloud Data Lineage API.
+
 
     - [Tools](https://mcp-toolbox.dev/dev/integrations/datalineage/tools/): No description provided.
 
@@ -1378,6 +1379,9 @@ This documentation is structured following the Diátaxis framework to assist in 
     - [Tools](https://mcp-toolbox.dev/dev/integrations/spanner/tools/): No description provided.
 
       - [spanner-execute-sql](https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-execute-sql/): A "spanner-execute-sql" tool executes a SQL statement against a Spanner database.
+
+
+      - [spanner-search-catalog](https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-search-catalog/): A "spanner-search-catalog" tool allows to search for entries based on the provided query.
 
 
       - [spanner-sql](https://mcp-toolbox.dev/dev/integrations/spanner/tools/spanner-sql/): A "spanner-sql" tool executes a pre-defined SQL statement against a Google Cloud Spanner database.
